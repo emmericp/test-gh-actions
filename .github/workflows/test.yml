@@ -21,8 +21,8 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - run: |
           export DEBIAN_FRONTEND=noninteractive
-          apt-get update
-          apt-get install -y ninja-build
+          sudo apt-get update
+          sudo apt-get install -y ninja-build
       - name: Checkout LuaLS
         uses: actions/checkout@v4
         with:
