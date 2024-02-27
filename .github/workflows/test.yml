@@ -28,7 +28,19 @@ jobs:
         with:
           repository: LuaLS/lua-language-server
           ref: 85f7e6f962ed47afa00ac7fd57e6130419d973ce
+          submodules: recursive
           path: ./luals
+      - name: Compile LuaLS
+        run: |
+          cd ${{ github.workspace }}/luals
+          pushd 3rd/luamake
+          ./compile/build.sh
+          popd
+          ./3rd/luamake/luamake -notest rebuild
+      - name: List files
+        run: |
+          ls ${{ github.workspace }}
+          find .
       - name: Check out repository code
         uses: actions/checkout@v4
       - name: List files
