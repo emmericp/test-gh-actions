@@ -61,4 +61,5 @@ jobs:
             --configpath ${{ github.workspace }}/luals-config/Check-Config.lua \
             --dbm_libraries ${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua \
             --check ${{ github.workspace }}/workspace
-          cat /home/runner/work/test-gh-actions/test-gh-actions/luals/log/check.json
+          cat ${{ github.workspace }}/luals/log/TRUSTED
+          cat ${{ github.workspace }}/luals/log/check.json
