@@ -1,4 +1,4 @@
-name: test
+name: luals-checker
 
 on:
   push:
@@ -11,14 +11,11 @@ on:
       - main
 
 
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: Lua language server magic
 jobs:
-  Explore-GitHub-Actions:
+  LuaLS-checker:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - run: |
           export DEBIAN_FRONTEND=noninteractive
           sudo apt-get update
@@ -64,7 +61,4 @@ jobs:
             --configpath ${{ github.workspace }}/luals-config/Check-Config.lua \
             --dbm_libraries ${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua \
             --check ${{ github.workspace }}/workspace
-      - name: List files
-        run: |
-          ls ${{ github.workspace }}
-          find .
+          cat /home/runner/work/test-gh-actions/test-gh-actions/luals/log/check.json
