@@ -23,7 +23,7 @@ libs[#libs + 1] = (basePath / "Definitions"):string()
 -- At first glance this may be a bit surprising that this is possible, but we are already executing code,
 -- so I guess the safety check has no meaning anyways if the user opts to run a Lua config file
 local trustedPluginsPath = fs.path(LOGPATH) / "TRUSTED"
-print(trustedPluginPath:string())
+print(trustedPluginsPath:string())
 print(logpath)
 local trustedPluginsFile, err = io.open(trustedPluginsPath:string(), "a+")
 if not trustedPluginsFile then
@@ -44,6 +44,7 @@ if not found then
                 trustedPluginsFile:write("\n")
         end
         trustedPluginsFile:write(pluginPath)
+        print("wrote", pluginPath)
 end
 trustedPluginsFile:close()
 
