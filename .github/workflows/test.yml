@@ -37,12 +37,32 @@ jobs:
           ./compile/build.sh
           popd
           ./3rd/luamake/luamake -notest rebuild
-      - name: List files
-        run: |
-          ls ${{ github.workspace }}
-          find .
-      - name: Check out repository code
+      - name: Checkout LuaLS config
         uses: actions/checkout@v4
+        with:
+          repository: DeadlyBossMods/LuaLS-Config
+          path: ./luals-config
+      - name: Checkout DBM-Unified
+        uses: actions/checkout@v4
+        with:
+          repository: DeadlyBossMods/DBM-Unified
+          path: ./DBM-Unified
+      - name: Checkout vscode-wow-api
+        uses: actions/checkout@v4
+        with:
+          repository: Ketho/vscode-wow-api
+          path: ./vscode-wow-api
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: ./workspace
+      - name: Run checks
+        run: |
+          cd luals
+          ./bin/lua-language-server \
+            --checklevel Information \
+            --configpath ${{ github.workspace }}/luals-config/Check-Config.lua \
+            --dbm_libraries ${{ github.workspace }}/DBM-Unified>,${{ github.workspace }}/vscode-wow-api/EmmyLua
       - name: List files
         run: |
           ls ${{ github.workspace }}
