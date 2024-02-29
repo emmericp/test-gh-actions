@@ -46,6 +46,7 @@ if not found then
         trustedPluginsFile:write(pluginPath)
         print("wrote", pluginPath)
 end
+trustedPluginsFile:flush()
 trustedPluginsFile:close()
 
 return {
