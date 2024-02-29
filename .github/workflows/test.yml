@@ -58,7 +58,7 @@ jobs:
           cd luals
           ./bin/lua-language-server \
             --checklevel Information \
-            --configpath ${{ github.workspace }}/luals-config/Check-Config.lua \
+            --configpath ${{ github.workspace }}/workspace/config.lua \
             --dbm_libraries ${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua \
             --check ${{ github.workspace }}/workspace
           cat ${{ github.workspace }}/luals/log/TRUSTED
