@@ -7,7 +7,7 @@ end
 -- debugging why plugin isn't being loaded
 -- i bet the canonicalization is the problem, maybe we just get rid of this self-adding logic and make the script add it
 local basePath = fs.canonical(CONFIGPATH):parent_path()
-local pluginPath = (basePath / "Plugin/Plugin.lua"):string()
+local pluginPath = "/home/runner/work/test-gh-actions/test-gh-actions/luals-config/Plugin/Plugin.lua"
 
 print(CONFIGPATH)
 print(basePath:string())
@@ -24,7 +24,7 @@ libs[#libs + 1] = (basePath / "Definitions"):string()
 -- so I guess the safety check has no meaning anyways if the user opts to run a Lua config file
 local trustedPluginsPath = fs.path(LOGPATH) / "TRUSTED"
 print(trustedPluginsPath:string())
-print(logpath)
+print(LOGPATH)
 local trustedPluginsFile, err = io.open(trustedPluginsPath:string(), "a+")
 if not trustedPluginsFile then
         error("Could not write to TRUSTED file: " .. err)
