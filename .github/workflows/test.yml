@@ -61,5 +61,7 @@ jobs:
             --configpath ${{ github.workspace }}/workspace/config.lua \
             --dbm_libraries ${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua \
             --check ${{ github.workspace }}/workspace
+          echo i am very confused what is going on
           cat ${{ github.workspace }}/luals/log/TRUSTED
+          echo why is there random stuff in the TRUSTED file?
           cat ${{ github.workspace }}/luals/log/check.json
