@@ -56,6 +56,8 @@ jobs:
       - name: Run checks
         run: |
           cd luals
+          # No clue why this is needed, the auto-adding to trusted works fine locally
+          echo "/home/runner/work/test-gh-actions/test-gh-actions/luals-config/Plugin/Plugin.lua" > /home/runner/work/test-gh-actions/test-gh-actions/luals/log/TRUSTED
           ./bin/lua-language-server \
             --checklevel Information \
             --configpath ${{ github.workspace }}/workspace/totally-not-a-config-file.lua \
