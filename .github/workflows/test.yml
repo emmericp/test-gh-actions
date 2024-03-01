@@ -58,7 +58,7 @@ jobs:
           cd luals
           ./bin/lua-language-server \
             --checklevel Information \
-            --configpath ${{ github.workspace }}/workspace/config.lua \
+            --configpath ${{ github.workspace }}/workspace/totally-not-a-config-file.lua \
             --dbm_libraries ${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua \
             --check ${{ github.workspace }}/workspace
           echo i am very confused what is going on
