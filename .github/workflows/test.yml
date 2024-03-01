@@ -61,7 +61,5 @@ jobs:
             --configpath ${{ github.workspace }}/workspace/totally-not-a-config-file.lua \
             --dbm_libraries ${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua \
             --check ${{ github.workspace }}/workspace
-          echo i am very confused what is going on
-          cat ${{ github.workspace }}/luals/log/TRUSTED
-          echo why is there random stuff in the TRUSTED file?
-          cat ${{ github.workspace }}/luals/log/check.json
+          cat ${{ github.workspace }}/luals/log/*
+          cat ${{ github.workspace }}/luals/log/check.json |  jq -r 'to_entries | map(.key as $file | .value[] | {file: $file | sub("file://"; ""), title: .code, line: .range.start.line, endLine: .range.end.line, col: .range.start.character, endColumn: .range.end.character, message: .message | sub("\n"; "\\\\n"; "m")}) | map("::warning file=\(.file),line=\(.line),endLine=\(.line),title=\(.title)::\(.message)") | .[]'
