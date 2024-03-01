@@ -11,69 +11,18 @@ on:
       - main
 
 
-run-name: Lua language server magic
+run-name: Test LuaLS
 jobs:
   LuaLS-checker:
     runs-on: ubuntu-latest
     steps:
-      - name: Cache LuaLS
-        id: cache-luals
-        uses: actions/cache@v4
-        env:
-          cache-name: luals
-        with:
-          path: ${{ github.workspace }}/luals
-          # fixme: should use variable
-          key: emmericp/lua-language-server/606e9cd238dbc924929d7047497de30ff44ee50c
-      - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
-        name: "Install LuaLS build dependencies"
-        run: |
-          export DEBIAN_FRONTEND=noninteractive
-          sudo apt-get update
-          sudo apt-get install -y ninja-build
-      - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
-        name: Checkout LuaLS
-        uses: actions/checkout@v4
-        with:
-          repository: emmericp/lua-language-server
-          ref: 606e9cd238dbc924929d7047497de30ff44ee50c
-          submodules: recursive
-          path: ./luals
-      - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
-        name: Compile LuaLS
-        run: |
-          cd ${{ github.workspace }}/luals
-          pushd 3rd/luamake
-          ./compile/build.sh
-          popd
-          ./3rd/luamake/luamake -notest rebuild
-      - name: Checkout LuaLS config
-        uses: actions/checkout@v4
-        with:
-          repository: DeadlyBossMods/LuaLS-Config
-          path: ./luals-config
-      - name: Checkout DBM-Unified
-        uses: actions/checkout@v4
-        with:
-          repository: DeadlyBossMods/DBM-Unified
-          path: ./DBM-Unified
-      - name: Checkout vscode-wow-api
-        uses: actions/checkout@v4
-        with:
-          repository: Ketho/vscode-wow-api
-          path: ./vscode-wow-api
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           path: ./workspace
-      - name: Run checks
-        run: |
-          cd luals
-          ./bin/lua-language-server \
-            --checklevel Information \
-            --configpath "${{ github.workspace }}/luals-config/Check-Config.lua" \
-            --dbm_libraries "${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua" \
-            --trust_all_plugins \
-            --check "${{ github.workspace }}/workspace"
-          touch log/check.json
-          cat ${{ github.workspace }}/luals/log/check.json |  jq -r 'to_entries | map(.key as $file | .value[] | {file: $file | sub("file://${{ github.workspace }}/workspace/"; ""), title: .code, line: .range.start.line, endLine: .range.end.line, col: .range.start.character, endColumn: .range.end.character, message: .message | sub("\n"; "\\\\n"; "m")}) | map("::warning file=\(.file),line=\(.line+1),endLine=\(.line+1),col=\(.col+1),endColumn=\(fmax(.col;.endColumn)+1),title=\(.title)::\(.message)") | .[]'
+      - name: LuaLS check
+        uses: DeadlyBossMods/LuaLS-config@main
+        with:
+          luals-repo: emmericp/lua-language-server
+          luals-ref: 606e9cd238dbc924929d7047497de30ff44ee50c
+          luals-check-dir: ${{ github.workspace }}/workspace
