@@ -18,13 +18,13 @@ jobs:
     steps:
       - name: Cache LuaLS
         id: cache-luals
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         env:
           cache-name: luals
         with:
           path: ${{ github.workspace }}/luals
           # fixme: should use variable
-          key: 85f7e6f962ed47afa00ac7fd57e6130419d973ce
+          key: emmericp/lua-language-server/606e9cd238dbc924929d7047497de30ff44ee50c
       - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
         name: "Install LuaLS build dependencies"
         run: |
@@ -35,8 +35,8 @@ jobs:
         name: Checkout LuaLS
         uses: actions/checkout@v4
         with:
-          repository: LuaLS/lua-language-server
-          ref: 85f7e6f962ed47afa00ac7fd57e6130419d973ce
+          repository: emmericp/lua-language-server
+          ref: 606e9cd238dbc924929d7047497de30ff44ee50c
           submodules: recursive
           path: ./luals
       - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
@@ -69,13 +69,11 @@ jobs:
       - name: Run checks
         run: |
           cd luals
-          # No clue why this is needed, the auto-adding to trusted works fine locally
-          mkdir -p "${{ github.workspace }}/log"
-          echo "${{ github.workspace }}/luals-config/Plugin/Plugin.lua" > "${{ github.workspace }}/log/TRUSTED"
           ./bin/lua-language-server \
             --checklevel Information \
             --configpath "${{ github.workspace }}/luals-config/Check-Config.lua" \
             --dbm_libraries "${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua" \
+            --trust_all_plugins
             --check "${{ github.workspace }}/workspace"
           cat ${{ github.workspace }}/luals/log/*
           test ! -e "${{ github.workspace }}/luals/log/check.json" || exit 0
