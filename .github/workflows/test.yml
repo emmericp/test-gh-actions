@@ -16,6 +16,7 @@ jobs:
   LuaLS-checker:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "hello, world why is this not running?"
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
