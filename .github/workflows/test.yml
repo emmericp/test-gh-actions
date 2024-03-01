@@ -75,6 +75,5 @@ jobs:
             --dbm_libraries "${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua" \
             --trust_all_plugins \
             --check "${{ github.workspace }}/workspace"
-          cat ${{ github.workspace }}/luals/log/*
-          test ! -e "${{ github.workspace }}/luals/log/check.json" || exit 0
+          #test ! -e "${{ github.workspace }}/luals/log/check.json" || exit 0
           cat ${{ github.workspace }}/luals/log/check.json |  jq -r 'to_entries | map(.key as $file | .value[] | {file: $file | sub("file://"; ""), title: .code, line: .range.start.line, endLine: .range.end.line, col: .range.start.character, endColumn: .range.end.character, message: .message | sub("\n"; "\\\\n"; "m")}) | map("::warning file=\(.file),line=\(.line),endLine=\(.line),title=\(.title)::\(.message)") | .[]'
