@@ -70,12 +70,13 @@ jobs:
         run: |
           cd luals
           # No clue why this is needed, the auto-adding to trusted works fine locally
-          mkdir -p /home/runner/work/test-gh-actions/test-gh-actions/luals/log/
-          echo "/home/runner/work/test-gh-actions/test-gh-actions/luals-config/Plugin/Plugin.lua" > /home/runner/work/test-gh-actions/test-gh-actions/luals/log/TRUSTED
+          mkdir -p "${{ github.workspace }}/log"
+          echo "${{ github.workspace }}/luals-config/Plugin/Plugin.lua" > "${{ github.workspace }}/log/TRUSTED"
           ./bin/lua-language-server \
             --checklevel Information \
-            --configpath ${{ github.workspace }}/workspace/totally-not-a-config-file.lua \
-            --dbm_libraries ${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua \
-            --check ${{ github.workspace }}/workspace
+            --configpath "${{ github.workspace }}/luals-config/Check-Config.lua" \
+            --dbm_libraries "${{ github.workspace }}/DBM-Unified,${{ github.workspace }}/vscode-wow-api/EmmyLua" \
+            --check "${{ github.workspace }}/workspace"
           cat ${{ github.workspace }}/luals/log/*
+          test ! -e "${{ github.workspace }}/luals/log/check.json" || exit 0
           cat ${{ github.workspace }}/luals/log/check.json |  jq -r 'to_entries | map(.key as $file | .value[] | {file: $file | sub("file://"; ""), title: .code, line: .range.start.line, endLine: .range.end.line, col: .range.start.character, endColumn: .range.end.character, message: .message | sub("\n"; "\\\\n"; "m")}) | map("::warning file=\(.file),line=\(.line),endLine=\(.line),title=\(.title)::\(.message)") | .[]'
