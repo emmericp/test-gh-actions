@@ -16,18 +16,31 @@ jobs:
   LuaLS-checker:
     runs-on: ubuntu-latest
     steps:
-      - run: |
+      - name: Cache LuaLS
+        id: cache-luals
+        uses: actions/cache@v3
+        env:
+          cache-name: luals
+        with:
+          path: ${{ github.workspace }}/luals
+          # fixme: should use variable
+          key: 85f7e6f962ed47afa00ac7fd57e6130419d973ce
+      - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
+        name: "Install LuaLS build dependencies"
+        run: |
           export DEBIAN_FRONTEND=noninteractive
           sudo apt-get update
           sudo apt-get install -y ninja-build
-      - name: Checkout LuaLS
+      - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
+        name: Checkout LuaLS
         uses: actions/checkout@v4
         with:
           repository: LuaLS/lua-language-server
           ref: 85f7e6f962ed47afa00ac7fd57e6130419d973ce
           submodules: recursive
           path: ./luals
-      - name: Compile LuaLS
+      - if: ${{ steps.cache-luals.outputs.cache-hit != 'true' }}
+        name: Compile LuaLS
         run: |
           cd ${{ github.workspace }}/luals
           pushd 3rd/luamake
@@ -57,6 +70,7 @@ jobs:
         run: |
           cd luals
           # No clue why this is needed, the auto-adding to trusted works fine locally
+          mkdir -p /home/runner/work/test-gh-actions/test-gh-actions/luals/log/
           echo "/home/runner/work/test-gh-actions/test-gh-actions/luals-config/Plugin/Plugin.lua" > /home/runner/work/test-gh-actions/test-gh-actions/luals/log/TRUSTED
           ./bin/lua-language-server \
             --checklevel Information \
