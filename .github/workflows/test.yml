@@ -29,6 +29,8 @@ jobs:
       - name: Test more details
         shell: bash
         run: |
+          ls /home/runner/work/_temp/_runner_file_commands/*
+          ls /home/runner/work/_temp/_runner_file_commands/step_summary*
           echo $GITHUB_STEP_SUMMARY
           ls $GITHUB_STEP_SUMMARY
           cat $GITHUB_STEP_SUMMARY
